@@ -1,98 +1,235 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🚀 NestJS Advanced Backend Boilerplate
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A modern, production-ready, and secure backend template built with **NestJS 11**, **ESM (ECMAScript Modules)**, **Prisma ORM 7**, **Better Auth**, and **Arcjet**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🌟 Key Features
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **⚡ NestJS 11 + Pure ESM**: Built on top of Express adapter using native Node.js ESM (`"type": "module"`).
+- **🛡️ Multi-Layer Security with Arcjet**:
+  - **Attack Protection (Shield)**: Protects against SQL injections, cross-site scripting (XSS), and common web vulnerabilities in real-time.
+  - **Bot Detection**: Automated bot mitigation while allowing developer tools (Postman, curl), search engines, and uptime monitors.
+  - **Rate Limiting**: Integrated fixed-window rate limiter per client IP.
+- **🔐 Modern Authentication with Better Auth**:
+  - Full email/password authentication flow.
+  - Prisma Database Adapter.
+  - Integrated into NestJS via `@thallesp/nestjs-better-auth`.
+  - Role-Based Access Control (RBAC) with `@Roles([Role.ADMIN])` and `AuthGuard`.
+- **🗄️ Database & Prisma ORM 7**:
+  - PostgreSQL support using `@prisma/adapter-pg` driver adapter.
+  - Type-safe schema generation, relations, and migrations.
+  - Schema mapping for Better Auth (`User`, `Session`, `Account`, `Verification`).
+- **📦 Global Response Transformation**:
+  - Unified API response format: `{ statusCode, message, data }`.
+  - Customizable route messages using the `@ResponseMessage('...')` decorator.
+- **🧪 Comprehensive Testing & Quality**:
+  - Unit tests configured with Jest (ESM module support).
+  - ESLint 9 + Prettier for strict type safety and consistent style.
 
-## Project setup
+---
 
-```bash
-$ pnpm install
+## 🏗️ Architecture & Project Structure
+
+```text
+src/
+├── common/                     # Global/shared cross-cutting concerns
+│   ├── decorators/             # Custom decorators (e.g. @ResponseMessage)
+│   ├── interceptors/          # Global interceptors (e.g. TransformInterceptor)
+│   └── index.ts
+├── generated/                  # Prisma generated client output
+│   └── prisma/
+├── lib/                        # Global infrastructure integrations
+│   ├── auth/                   # Better Auth server configuration
+│   └── database/               # Prisma service and module (@Global)
+├── module/                     # Business logic and feature modules
+│   └── user/                   # User module (Controller, Service, Tests)
+├── app.controller.ts           # Root controller
+├── app.module.ts               # Root module configuring guards, config & Arcjet
+├── app.service.ts              # Root service
+└── main.ts                     # Application entry point (Global interceptors, port binding)
 ```
 
-## Compile and run the project
+---
+
+## 🧰 Tech Stack & Dependencies
+
+### Core Framework
+| Package | Description |
+| :--- | :--- |
+| `@nestjs/core`, `@nestjs/common` | Core NestJS 11 framework |
+| `@nestjs/platform-express` | Express platform adapter |
+| `@nestjs/config` | Global environment configuration |
+
+### Database & ORM
+| Package | Description |
+| :--- | :--- |
+| `prisma`, `@prisma/client` | Prisma ORM 7 client & CLI |
+| `@prisma/adapter-pg`, `pg` | PostgreSQL driver adapter |
+
+### Authentication & Security
+| Package | Description |
+| :--- | :--- |
+| `better-auth` | Modern TypeScript-first authentication framework |
+| `@thallesp/nestjs-better-auth` | NestJS module & decorators for Better Auth |
+| `@arcjet/nest` | Security layer: Rate limiting, bot detection, and shield protection |
+
+---
+
+## ⚙️ Getting Started
+
+### 1. Prerequisites
+
+- **Node.js**: `v20+` or `v24+`
+- **Package Manager**: `pnpm` (recommended), `npm`, or `yarn`
+- **PostgreSQL Database**: Local PostgreSQL instance or cloud database (e.g. Prisma Postgres, Supabase, Neon)
+
+### 2. Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone git@github.com:athul21eb/nest_js_basic_app.git
+cd nest_js_basic_app
+pnpm install
 ```
 
-## Run tests
+### 3. Environment Configuration
+
+Copy the example environment file and fill in your credentials:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Configure the following variables in `.env`:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```env
+# Database
+DATABASE_URL="postgres://user:password@localhost:5432/mydb?sslmode=prefer"
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+# Better Auth
+BETTER_AUTH_SECRET="your-super-secret-key-here"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Arcjet Security
+ARCJET_KEY="ajkey_your_arcjet_key"
+ARCJET_ENV="development"
+ARCJET_MODE="LIVE"
+
+# Server Port
+PORT=3000
+```
+
+### 4. Database Setup & Prisma Migration
+
+Generate Prisma client and run migrations:
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Push schema to database / Run migrations
+npx prisma migrate dev --name init
+
+# Generate Prisma Client
+npx prisma generate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+To explore and edit data with Prisma Studio:
 
-## Resources
+```bash
+npx prisma studio
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+---
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 🚀 Running the Application
 
-## Support
+```bash
+# Development mode with hot-reload
+pnpm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Production build & start
+pnpm run build
+pnpm run start:prod
+```
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 📡 API Endpoints & Usage
 
-## License
+### 1. Authentication Routes (Better Auth)
+Better Auth routes are mounted automatically at `/api/auth`:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/sign-up/email` | Register a new user |
+| `POST` | `/api/auth/sign-in/email` | Login with email & password |
+| `POST` | `/api/auth/sign-out` | Log out and revoke session |
+| `GET` | `/api/auth/get-session` | Get active user session |
+
+### 2. User Routes
+
+| Method | Endpoint | Auth Required | Roles | Description |
+| :--- | :--- | :---: | :---: | :--- |
+| `GET` | `/user/all` | ✅ | `ADMIN` | Fetch all registered users |
+| `GET` | `/user/:id` | ✅ | Any authenticated | Fetch user details by ID |
+
+---
+
+## 🎨 Response Format
+
+All standard HTTP responses are automatically formatted by the `TransformInterceptor`:
+
+```json
+{
+  "statusCode": 200,
+  "message": "All users fetched successfully",
+  "data": [
+    {
+      "id": "cm01abc...",
+      "name": "Alex Doe",
+      "email": "alex@example.com",
+      "role": "ADMIN",
+      "createdAt": "2026-08-21T00:00:00.000Z"
+    }
+  ]
+}
+```
+
+To customize the `message` for any route, use the `@ResponseMessage('Your Message')` decorator on the controller method:
+
+```typescript
+@Get('all')
+@Roles([Role.ADMIN])
+@ResponseMessage('All users fetched successfully')
+async getAllUsers() {
+  return this.userService.findAll();
+}
+```
+
+---
+
+## 🧪 Testing & Linting
+
+```bash
+# Run unit tests
+pnpm test
+
+# Run tests in watch mode
+pnpm run test:watch
+
+# Run test coverage
+pnpm run test:cov
+
+# Run E2E tests
+pnpm run test:e2e
+
+# Run linter and formatting
+pnpm run lint
+pnpm run format
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the [UNLICENSED](LICENSE) license.
